@@ -1,0 +1,7 @@
+train: C:/Users/B20770/Desktop/yolo_tongue_coating/Tongue_coating_classification/yolo_data/images/train
+val: C:/Users/B20770/Desktop/yolo_tongue_coating/Tongue_coating_classification/yolo_data/images/val
+
+
+nc: 1  # Number of classes, single class
+names: ['Tongue']  # Class name
+task: segment  # Task type: segmentation
