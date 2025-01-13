@@ -84,7 +84,7 @@ plt.show()
 [舌苔數據集-中醫圖像識別資源](https://gitcode.com/open-source-toolkit/7542e/blob/main/Tongue%20coating%20classification%20%E5%A2%9E%E5%BC%BA.zip)
 ---
 
-### **舌苔數據集 - 中醫圖像識別資源**
+# **舌苔數據集 - 中醫圖像識別資源**
 
 此數據集包含不同舌苔種類的資料夾，每個資料夾中包含圖片及對應的標籤文件，用於圖像分割任務。標籤文件採用 JSON 格式，主要結構如下：
 
@@ -109,7 +109,7 @@ plt.show()
 
 ---
 
-### **數據集內容**
+# **數據集內容**
 - **黑舌苔（Black tongue coating）**：420 張照片  
 - **地圖舌（Map tongue coating）**：80 張照片  
 - **紫舌苔（Purple tongue coating）**：350 張照片  
