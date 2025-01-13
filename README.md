@@ -1,135 +1,114 @@
-# README: YOLO Segmentation Visualization Notebook
-
-## 概述
-
-這個 Notebook 演示了如何使用 [YOLOv11](https://github.com/ultralytics/ultralytics) 模型進行圖像分割，並通過 Matplotlib 對結果進行可視化。具體包括以下步驟：
-1. 加載 YOLO 模型和推理。
-2. 使用 OpenCV 處理圖片。
-3. 提取分割多邊形並進行可視化。
 
 ---
 
-## 文件結構和主要代碼邏輯
+# YOLO Segmentation Visualization Notebook
 
-### 1. 必要的依賴項
-Notebook 中使用了以下主要的 Python 庫：
-- `cv2`： 用於處理圖像。
-- `numpy`： 用於數據處理。
-- `matplotlib.pyplot`： 用於圖像的可視化。
-- `ultralytics.YOLO`： YOLO 模型的推理和結果處理。
+## 概述
+本 Notebook 演示了如何使用 [YOLOv11](https://github.com/ultralytics/ultralytics) 模型進行圖像分割，並通過 Matplotlib 完成可視化。主要流程包括：
+1. 加載 YOLO 模型並進行推理。
+2. 使用 OpenCV 讀取並處理圖片。
+3. 提取 YOLO 結果中的分割多邊形，並使用 Matplotlib 對結果進行可視化。
 
-安裝依賴項的命令：
+---
+
+## 文件結構與主要代碼邏輯
+
+### 1. 必要依賴項
+- **OpenCV (`cv2`)**：圖像讀取與處理。  
+- **NumPy (`numpy`)**：數據運算與處理。  
+- **Matplotlib (`matplotlib.pyplot`)**：圖像可視化。  
+- **Ultralytics (`ultralytics`)**：YOLO 模型推理與結果處理。
+
+安裝命令：
 ```bash
 pip install opencv-python numpy matplotlib ultralytics
 ```
 
-### 2. 載入 YOLO 模型
-以下代碼載入 YOLO 模型的權重，並進行推理：
+### 2. 加載 YOLO 模型
+以下範例載入 YOLO 模型權重並對圖像進行推理：
 ```python
 from ultralytics import YOLO
 
-model = YOLO(r"runs\\segment\\train\\weights\\best.pt")  # 替換為你的模型路徑
-image_path = r"test\\S__102228039.jpg"  # 替換為你的圖像路徑
+model = YOLO(r"runs\\segment\\train\\weights\\best.pt")  # 替換為你的權重路徑
+image_path = r"test\\S__102228039.jpg"                   # 替換為你的圖像路徑
 results = model.predict(source=image_path)
 result = results[0]
 ```
+- `best.pt`：訓練好的模型權重。
+- `image_path`：輸入圖片路徑。
+- 推理結果存在 `results` 中，`result = results[0]` 取得第一張圖像的推理結果。
 
-- `best.pt` 是訓練好的模型權重。
-- `image_path` 是輸入圖片路徑。
-- 推理結果存儲在 `results` 中。
 
-### 3. 圖像處理與可視化
-原圖使用 OpenCV 讀取，並用 Matplotlib 顯示：
-```python
-import cv2
-import matplotlib.pyplot as plt
+---
 
-img = cv2.imread(image_path)
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+## 模型效能報告
 
-plt.figure(figsize=(8, 6))
-plt.imshow(img)
-```
+### 1. 數據統計
+- 處理圖片數量：`300`
+- 平均 IoU（Intersection over Union）：`0.9547`
+- 平均 Dice 系數：`0.9766`
 
-提取 YOLO 結果中的分割多邊形，並繪製邊界線：
-```python
-polygons = result.masks.xy  # 取得多邊形座標
-for poly in polygons:
-    x = poly[:, 0]  # x 座標
-    y = poly[:, 1]  # y 座標
-    plt.plot(x, y, color='red', linewidth=2)  # 畫出多邊形邊界
-plt.title("Segmentation Polygons")
-plt.axis('off')
-plt.show()
-```
+### 2. 分類報告
+
+| 類別            | Precision | Recall | F1-Score | Support      |
+|-----------------|-----------|--------|----------|--------------|
+| **Background**  | 0.99      | 0.99   | 0.99     | 103,634,498  |
+| **Foreground**  | 0.98      | 0.98   | 0.98     | 29,075,902   |
+| **Accuracy**    |           |        | 0.99     | 132,710,400  |
+| **Macro Avg**   | 0.99      | 0.99   | 0.99     | 132,710,400  |
+| **Weighted Avg**| 0.99      | 0.99   | 0.99     | 132,710,400  |
+
+### 3. 指標總結
+- **精確率（Precision）**：區分前景與背景的準確度高達 98%-99%。  
+- **召回率（Recall）**：對目標區域的覆蓋率為 98%-99%。  
+- **F1 分數（F1-Score）**：綜合評估達 98%-99%。  
+- **整體準確率（Accuracy）**：所有像素的準確率為 `99%`。
+
+模型在分割任務中表現優異，適用於有明確分割需求的多種應用場景。
 
 ---
 
 ## 如何使用
 
-1. 確保安裝了必要的依賴項。
-2. 替換 `best.pt` 為你的模型權重路徑。
-3. 替換 `image_path` 為你的輸入圖片路徑。
-4. 運行 Notebook，查看分割結果的可視化。
+1. **確保已安裝必要依賴項**  
+   ```bash
+   pip install opencv-python numpy matplotlib ultralytics
+   ```
+2. **替換為個人檔案路徑**  
+   - 模型權重：`best.pt`  
+   - 圖像：`image_path`
+3. **運行 Notebook**  
+   - 觀察輸出結果，包括原始圖像與疊加分割多邊形的圖像。
 
 ---
 
 ## 輸出結果
-運行 Notebook 後，輸出將顯示：
-1. 原始圖像。
-2. 標註了分割多邊形的圖像，可選擇顯示輪廓或填充區域。
 
-資料集
-
-[舌苔數據集-中醫圖像識別資源](https://gitcode.com/open-source-toolkit/7542e/blob/main/Tongue%20coating%20classification%20%E5%A2%9E%E5%BC%BA.zip)
----
-
-### **舌苔數據集 - 中醫圖像識別資源**
-
-此數據集包含不同舌苔種類的資料夾，每個資料夾中包含圖片及對應的標籤文件，用於圖像分割任務。標籤文件採用 JSON 格式，主要結構如下：
-
-1. **`shapes`**
-   - 定義標記的形狀（多邊形）。
-   - **`label`**：標籤名稱，例如 `"black tongue coating"`，表示“黑舌苔”區域。
-   - **`points`**：多邊形的頂點座標列表，用於描述標記區域的形狀。
-
-2. **`imagePath`**
-   - 圖像文件名稱，例如 `"black tongue coating_1.jpg"`。
-
-3. **`imageData`**
-   - 圖像的 base64 編碼，用於內嵌圖像數據。
-
-4. **`imageHeight` 和 `imageWidth`**
-   - 圖像尺寸：512x512 像素。
-
-5. **`lineColor` 和 `fillColor`**
-   - 線條顏色和填充顏色，用於標記區域的可視化。
-
-此標籤文件適用於圖像標註工具（如 LabelMe），主要用於訓練深度學習模型進行圖像分割任務。
+運行 Notebook 後將得到兩張圖：
+1. **原始圖像**。  
+2. **疊加分割多邊形的圖像**（可選填充或顯示輪廓）。
 
 ---
 
-### **數據集內容**
-- **黑舌苔（Black tongue coating）**：420 張照片  
-- **地圖舌（Map tongue coating）**：80 張照片  
-- **紫舌苔（Purple tongue coating）**：350 張照片  
-- **紅舌黃苔厚膩苔（Red tongue yellow fur thick greasy fur）**：770 張照片  
-- **紅舌厚膩苔（The red tongue is thick and greasy）**：550 張照片  
-- **白舌厚膩苔（The white tongue is thick and greasy）**：300 張照片  
+## 數據集資源
 
-此數據集可用於中醫圖像識別及舌苔分類的研究與應用，特別適合深度學習模型的訓練與測試。
+以下為多個可用於舌苔或口腔圖像分割與識別的數據集，方便進行模型訓練與測試。
 
+### 1. [舌苔數據集 - 中醫圖像識別資源](https://gitcode.com/open-source-toolkit/7542e/blob/main/Tongue%20coating%20classification%20%E5%A2%9E%E5%BC%BA.zip)
+- **標籤格式**：JSON（包含分割多邊形的頂點座標）。  
+- **圖像尺寸**：通常為 512×512。  
+- **主要標籤**：不同舌苔類型（如黑苔、地圖舌、紫苔、紅舌黃苔、白苔等）。  
 
-[TongeImageDataset](https://github.com/BioHit/TongeImageDataset/tree/master)
+### 2. [TongeImageDataset](https://github.com/BioHit/TongeImageDataset/tree/master)
+- **規模**：300 張  
+- **包含內容**：原圖與對應的 mask 圖片
+
+### 3. [Oral Cancer (Lips and Tongue) images](https://www.kaggle.com/datasets/shivam17299/oral-cancer-lips-and-tongue-images/data)
+- **規模**：87 張口腔（癌症舌頭）+ 44 張非癌症舌頭  
+- **用例**：針對口腔癌圖像識別的研究
+
+### 4. [tooth-marked-tongue](https://www.kaggle.com/datasets/clearhanhui/biyesheji?utm_source=chatgpt.com)
+- **規模**：546 張齒痕黑白舌頭 + 704 張正常舌頭  
+
 ---
-包含300張
-包含原圖以及mask圖片
-
-[Oral Cancer (Lips and Tongue) images](https://www.kaggle.com/datasets/shivam17299/oral-cancer-lips-and-tongue-images/data)
----
-包含87張癌症舌頭資料以及44張飛癌症舌頭資料
-
-
-[tooth-marked-tongue](https://www.kaggle.com/datasets/clearhanhui/biyesheji?utm_source=chatgpt.com)
----
-包含546張齒痕黑白舌頭以及704張正常舌頭
+以上數據集適用於中醫舌苔圖像識別、口腔癌檢測等應用領域，方便利用深度學習技術進行分割、分類與診斷研究。
