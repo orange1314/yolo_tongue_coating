@@ -121,12 +121,15 @@ plt.show()
 
 
 [TongeImageDataset](https://github.com/BioHit/TongeImageDataset/tree/master)
+---
 包含300張
 包含原圖以及mask圖片
 
 [Oral Cancer (Lips and Tongue) images](https://www.kaggle.com/datasets/shivam17299/oral-cancer-lips-and-tongue-images/data)
+---
 包含87張癌症舌頭資料以及44張飛癌症舌頭資料
 
 
 [tooth-marked-tongue](https://www.kaggle.com/datasets/clearhanhui/biyesheji?utm_source=chatgpt.com)
+---
 包含546張齒痕黑白舌頭以及704張正常舌頭
